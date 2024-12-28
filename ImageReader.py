@@ -19,10 +19,15 @@ class ImageReader:
         for root, _, files in os.walk(self.image_path):
             for file in files:
                 if file.lower().endswith('.png'):  # 检查文件扩展名是否为 .png
-                    if self._checkIs16Width(os.path.join(root, file)):
-                        pass
-                    else:
-                        print(f"{file} 宽度不为16")
+                    if file.replace(".png", "").endswith("_OVERLAY"):
+                        print(f"{file} 后缀为 _OVERLAY 跳过")
+                        continue
+                    if file.replace(".png", "") == "void":
+                        print(f"{file} 为 void 跳过")
+                        continue
+                    if not self._checkIs16Width(os.path.join(root, file)):
+                        print(f"{file} 宽度不为16 跳过")
+                        continue
                     full_path = os.path.join(root, file)
                     self.images.append(full_path)
 
